@@ -1,0 +1,19 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: receive-event
+spec:
+  type: bindings.kafka
+  metadata:
+    - name: brokers
+      value: BROKER_URL # replace
+    - name: topics
+      value: EVENTHUB_NAMESPACE # replace
+    - name: consumerGroup
+      value: $Default
+    - name: authRequired
+      value: "true"
+    - name: saslUsername
+      value: $ConnectionString
+    - name: saslPassword
+      value: CONNECTION_STRING # Replace 

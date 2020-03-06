@@ -1,0 +1,42 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: eventhub-consumer
+  labels:
+    app: eventhub-consumer
+spec:
+  selector:
+    app: eventhub-consumer
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 3000
+  type: LoadBalancer
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eventhub-consumer
+  labels:
+    app: eventhub-consumer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eventhub-consumer
+  template:
+    metadata:
+      labels:
+        app: eventhub-consumer
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/id: "eventhub-consumer"
+        dapr.io/port: "3000"
+    spec:
+      containers:
+      - name: node
+        image: eventhub-consumer:latest
+        ports:
+        - containerPort: 3000
+        imagePullPolicy: IfNotPresent
